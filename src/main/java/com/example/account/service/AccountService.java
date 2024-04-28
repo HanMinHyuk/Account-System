@@ -36,7 +36,7 @@ public class AccountService {
         AccountUser accountUser = getAccountUser(userId);
         validateCreateAccount(accountUser);
 
-        String newAccountNumber = getNewAccountNumber();  //accountNumber 랜덤 10자리 계좌 생성
+        String newAccountNumber = getNewAccountNumber();  //accountNumber 랜덤 10자리 계좌 생성합니다.
 
         return AccountDto.fromEntity(
                 accountRepository.save(Account.builder()
@@ -50,12 +50,12 @@ public class AccountService {
     }
 
     private String getNewAccountNumber() {
-        //계좌 번호 생성
+        //계좌 번호를 생성합니다.
         String newAccountNumber = accountRepository.findFirstByOrderByIdDesc()
                 .map(account -> String.valueOf((Integer.parseInt(account.getAccountNumber())) + 1))
                 .orElse(createRandomAccountNumber());
 
-        //새로 생성한 계좌 번호가 이미 사용하고 있는 번호이면 에러 처리
+        //이미 사용하고 있는 번호이면 에러 처리합니다.
         if (accountRepository.findByAccountNumber(newAccountNumber).isPresent()) {
             throw new AccountException(ACCOUNT_NUMBER_ALREADY_USE);
         }
@@ -67,7 +67,7 @@ public class AccountService {
         Random random = new Random();
         StringBuilder stringBuilder = new StringBuilder();
 
-        //시중 은행에서 0부터 시작하는 계좌번호도 있기 때문에 전체 랜덤 사용
+        //보통 은행에서 0부터 시작하는 계좌번호도 있기 때문에 전체 랜덤을 사용합니다.
         for (int i = 0; i < 10; i++) {
             stringBuilder.append(random.nextInt(10));
         }
@@ -76,7 +76,7 @@ public class AccountService {
     }
 
     private void validateCreateAccount(AccountUser accountUser) {
-        //계좌번호가 10자리 정수가 넘어가면 에러 처리
+        //계좌번호가 10자리 정수가 넘어가면 에러 처리를 합니다.
         if (accountRepository.countByAccountUser(accountUser) >= 10) {
             throw new AccountException(MAX_ACCOUNT_PER_USER_10) ;
         }
